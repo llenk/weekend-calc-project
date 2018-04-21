@@ -13,13 +13,15 @@ function onReady() {
     $('.op').on('click', inputOperation);
     $('#equals').on('click', updateOperations);
     $('#clear').on('click', clearHistory);
+    $('#operationsList').on('click', '.hist', redoOperation);
 }
 
 function updateInput() {
     let currentNum = $('#numInput').val();
         currentNum += $(this).attr('id');
     if (justAnswered) {
-        let currentNum = $(this).attr('id');
+        currentNum = $(this).attr('id');
+        justAnswered = false;
     }
     $('#numInput').val(currentNum);
 }
@@ -49,6 +51,16 @@ function sendOperation() {
     justAnswered = true;
 }
 
+function redoOperation() {
+    $.ajax({
+        method: 'POST',
+        url: '/redo-operation',
+        data: {st: $(this).text()}
+    }).then(function(response) {
+        updateOperationHistory();
+    });
+}
+
 function updateOperationHistory() {
     $.ajax({
         method: 'GET',
@@ -61,7 +73,7 @@ function updateOperationHistory() {
 }
 
 function appendToDOM(item) {
-    $('#operationsList').append(`<p id="hist">${item.calc}</p>`);
+    $('#operationsList').append(`<p class="hist">${item.calc}</p>`);
 }
 
 function clearHistory() {

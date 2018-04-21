@@ -21,6 +21,10 @@ app.delete('/delete-history', (req, res) => {
     operationHistory = [];
     res.sendStatus(200);
 });
+app.post('/redo-operation', (req, res) => {
+    findAndRedoOperation(req.body.st);
+    res.sendStatus(200);
+});
 
 
 //MATH FUNCTIONS
@@ -52,28 +56,35 @@ add = (operation) => {
     let result = operation.x + operation.y;
     let calculation = `${operation.x} + ${operation.y} = ${result}`;
     operationHistory.unshift({calc: calculation, result: result});
-}
+};
 subtract = (operation) => {
     let result = operation.x - operation.y;
     let calculation = `${operation.x} - ${operation.y} = ${result}`;
     operationHistory.unshift({calc: calculation, result: result});
-} 
+};
 multiply = (operation) => {
     let result = operation.x * operation.y;
     let calculation = `${operation.x} * ${operation.y} = ${result}`;
     operationHistory.unshift({calc: calculation, result: result});
-} 
+};
 divide = (operation) => {
     let result = operation.x / operation.y;
     let calculation = `${operation.x} / ${operation.y} = ${result}`;
     operationHistory.unshift({calc: calculation, result: result});
-} 
-deleteHistory = () => {
-    operationHistory = [];
-}
+};
 error = () => {
     operationHistory.unshift('ERROR: Please specify operation type');
-}
+};
+
+//REDOING OPERATION
+findAndRedoOperation = (calc) => {
+    for (operation of operationHistory) {
+        if (operation.calc == calc) {
+            operationHistory.unshift(operation);
+            calc = '';
+        }
+    }
+};
 
 //SERVER
 app.listen(PORT, () => {

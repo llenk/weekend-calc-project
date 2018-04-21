@@ -1,4 +1,3 @@
-console.log('javascript connected');
 $(document).ready(onReady);
 
 let operation = {

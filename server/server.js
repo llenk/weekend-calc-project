@@ -17,7 +17,10 @@ app.post('/operation', (req, res) => {
 app.get('/operation-history', (req, res) => {
     res.send(operationHistory);
 });
-
+app.delete('/delete-history', (req, res) => {
+    operationHistory = [];
+    res.sendStatus(200);
+});
 
 
 //MATH FUNCTIONS
@@ -48,22 +51,22 @@ doMath = (operation) => {
 add = (operation) => {
     let result = operation.x + operation.y;
     let calculation = `${operation.x} + ${operation.y} = ${result}`;
-    operationHistory.unshift(calculation);
-} 
+    operationHistory.unshift({calc: calculation, result: result});
+}
 subtract = (operation) => {
     let result = operation.x - operation.y;
     let calculation = `${operation.x} - ${operation.y} = ${result}`;
-    operationHistory.unshift(calculation);
+    operationHistory.unshift({calc: calculation, result: result});
 } 
 multiply = (operation) => {
     let result = operation.x * operation.y;
     let calculation = `${operation.x} * ${operation.y} = ${result}`;
-    operationHistory.unshift(calculation);
+    operationHistory.unshift({calc: calculation, result: result});
 } 
 divide = (operation) => {
     let result = operation.x / operation.y;
     let calculation = `${operation.x} / ${operation.y} = ${result}`;
-    operationHistory.unshift(calculation);
+    operationHistory.unshift({calc: calculation, result: result});
 } 
 deleteHistory = () => {
     operationHistory = [];

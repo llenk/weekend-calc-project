@@ -5,23 +5,29 @@ let operation = {
     x: 0,
     y: 0,
     type: ''
-}
+};
+let justAnswered = false;
 
 function onReady() {
-    $('#add').on('click', function() {
-        operation.type = 'Add';
-    });
-    $('#subtract').on('click', function() {
-        operation.type = 'Subtract';
-    });
-    $('#multiply').on('click', function() {
-        operation.type = 'Multiply';
-    });
-    $('#divide').on('click', function() {
-        operation.type = 'Divide';
-    });
+    $('.num').on('click', updateInput);
+    $('.op').on('click', inputOperation);
     $('#equals').on('click', updateOperations);
     $('#clear').on('click', clearHistory);
+}
+
+function updateInput() {
+    let currentNum = $('#numInput').val();
+        currentNum += $(this).attr('id');
+    if (justAnswered) {
+        let currentNum = $(this).attr('id');
+    }
+    $('#numInput').val(currentNum);
+}
+
+function inputOperation() {
+    operation.x = $('#numInput').val();
+    $('#numInput').val('');
+    operation.type = $(this).attr('id');
 }
 
 function updateOperations() {
@@ -31,8 +37,8 @@ function updateOperations() {
 }
 
 function sendOperation() {
-    operation.x = $('#firstNumber').val();
-    operation.y = $('#secondNumber').val();
+    operation.y = $('#numInput').val();
+    $('#numInput').val('');
     $.ajax({
         method: 'POST',
         url: '/operation',
@@ -40,7 +46,7 @@ function sendOperation() {
     }).then(function(response) {
         updateOperationHistory();
     });
-    $('input').val('');
+    justAnswered = true;
 }
 
 function updateOperationHistory() {
@@ -49,14 +55,21 @@ function updateOperationHistory() {
         url: '/operation-history'
     }).then(function(response) {
         $('#operationsList').empty();
-        response.forEach(appendToDOM)
+        response.forEach(appendToDOM);
+        $('#numInput').val(response[0].result);
     });
 }
+
 function appendToDOM(item) {
-    $('#operationsList').append(`<p>${item}</p>`);
+    $('#operationsList').append(`<p id="hist">${item.calc}</p>`);
 }
 
 function clearHistory() {
-    operation.type = 'Delete';
-    sendOperation();
+    // TODO: make this a DELETE ajax call
+    $.ajax({
+        method: 'DELETE',
+        url: '/delete-history'
+    }).then(function(response) {
+        updateOperationHistory();
+    });
 }

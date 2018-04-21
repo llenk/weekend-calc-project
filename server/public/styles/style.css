@@ -1,3 +1,29 @@
 body {
     background: rgb(230, 230, 230);
 }
+.butt {
+    font-size: 20px;
+    width: 50px;
+    height: 40px;
+    border-radius: 2px;
+    margin: 3px;
+}
+.num {
+    background: #708090;
+    border: 1px solid #506070;
+}
+.eq {
+    background: #ff4d4d;
+    border: 1px solid #df2d2d;
+}
+.op {
+    background: #2080df;
+    border: 1px solid #0060bf;
+}
+#numInput {
+    width: 222px;
+    height: 40px;
+    margin: 3px;
+    font-size: 20px;
+    text-align: right;
+}
